@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: usuarios
+  datasource:
+    # H2 en memoria para empezar. Luego se cambia a MySQL/PostgreSQL solo tocando esto.
+    url: jdbc:h2:mem:usuarios;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+jwt:
+  secret: ${JWT_SECRET:cambia-este-secreto-por-uno-largo-de-minimo-32-caracteres}
+  expiration-ms: 3600000
+
+server:
+  port: 8081
