@@ -26,6 +26,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     @Override
+    public boolean existsByDocumento(String documento) {
+        return userRepository.existsByDocumento(documento);
+    }
+
+    @Override
     public User save(User user) {
         return toModel(userRepository.save(toEntity(user)));
     }

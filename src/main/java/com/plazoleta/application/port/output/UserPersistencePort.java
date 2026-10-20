@@ -10,5 +10,7 @@ public interface UserPersistencePort {
 
     boolean existsByCorreo(String correo);
 
+    boolean existsByDocumento(String documento);
+
     User save(User user);
 }

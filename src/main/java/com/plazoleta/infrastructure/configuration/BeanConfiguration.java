@@ -1,9 +1,11 @@
 package com.plazoleta.infrastructure.configuration;
 
+import com.plazoleta.application.port.input.CreateOwnerUseCase;
 import com.plazoleta.application.port.input.LoginUseCase;
 import com.plazoleta.application.port.output.PasswordEncoderPort;
 import com.plazoleta.application.port.output.TokenPort;
 import com.plazoleta.application.port.output.UserPersistencePort;
+import com.plazoleta.application.service.CreateOwnerService;
 import com.plazoleta.application.service.LoginService;
 import com.plazoleta.infrastructure.output.persistence.adapter.UserPersistenceAdapter;
 import com.plazoleta.infrastructure.output.persistence.repository.UserRepository;
@@ -38,5 +40,11 @@ public class BeanConfiguration {
                                      PasswordEncoderPort passwordEncoderPort,
                                      TokenPort tokenPort) {
         return new LoginService(userPersistencePort, passwordEncoderPort, tokenPort);
+    }
+
+    @Bean
+    public CreateOwnerUseCase createOwnerUseCase(UserPersistencePort userPersistencePort,
+                                                 PasswordEncoderPort passwordEncoderPort) {
+        return new CreateOwnerService(userPersistencePort, passwordEncoderPort);
     }
 }
