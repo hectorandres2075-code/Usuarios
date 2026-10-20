@@ -36,10 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = Jwts.parser().verifyWith(key).build()
                         .parseSignedClaims(header.substring(7)).getPayload();
                 String rol = claims.get("rol", String.class);
+                Long userId = ((Number) claims.get("id")).longValue();
                 var auth = new UsernamePasswordAuthenticationToken(
-                        claims.getSubject(), null, List.of(new SimpleGrantedAuthority("ROLE_" + rol)));
+                        userId, null, List.of(new SimpleGrantedAuthority("ROLE_" + rol)));
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (JwtException | IllegalArgumentException e) {
+            } catch (JwtException | IllegalArgumentException | NullPointerException e) {
                 SecurityContextHolder.clearContext(); // token inválido o vencido: sigue sin autenticar
             }
         }

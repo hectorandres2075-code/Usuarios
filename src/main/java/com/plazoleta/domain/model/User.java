@@ -14,6 +14,7 @@ public class User {
     private String correo;
     private String clave;
     private Role rol;
+    private Long idRestaurante; // solo se usa en los EMPLEADOS
 
     public User() {
     }
@@ -47,6 +48,8 @@ public class User {
     public void setCorreo(String correo) { this.correo = correo; }
     public String getClave() { return clave; }
     public void setClave(String clave) { this.clave = clave; }
+    public Long getIdRestaurante() { return idRestaurante; }
+    public void setIdRestaurante(Long idRestaurante) { this.idRestaurante = idRestaurante; }
     public Role getRol() { return rol; }
     public void setRol(Role rol) { this.rol = rol; }
 }

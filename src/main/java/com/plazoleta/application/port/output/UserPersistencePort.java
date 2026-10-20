@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface UserPersistencePort {
 
+    Optional<User> findById(Long id);
+
     Optional<User> findByCorreo(String correo);
 
     boolean existsByCorreo(String correo);

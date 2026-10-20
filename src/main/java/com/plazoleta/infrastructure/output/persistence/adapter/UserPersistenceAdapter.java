@@ -16,6 +16,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     @Override
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id).map(this::toModel);
+    }
+
+    @Override
     public Optional<User> findByCorreo(String correo) {
         return userRepository.findByCorreo(correo).map(this::toModel);
     }
@@ -36,8 +41,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     private User toModel(UserEntity e) {
-        return new User(e.getId(), e.getNombre(), e.getApellido(), e.getDocumento(), e.getCelular(),
+        User u = new User(e.getId(), e.getNombre(), e.getApellido(), e.getDocumento(), e.getCelular(),
                 e.getFechaNacimiento(), e.getCorreo(), e.getClave(), e.getRol());
+        u.setIdRestaurante(e.getIdRestaurante());
+        return u;
     }
 
     private UserEntity toEntity(User u) {
@@ -51,6 +58,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         e.setCorreo(u.getCorreo());
         e.setClave(u.getClave());
         e.setRol(u.getRol());
+        e.setIdRestaurante(u.getIdRestaurante());
         return e;
     }
 }

@@ -2,7 +2,10 @@ package com.plazoleta.infrastructure.input.rest;
 
 import com.plazoleta.domain.exception.InvalidCredentialsException;
 import com.plazoleta.domain.exception.InvalidUserDataException;
+import com.plazoleta.domain.exception.NotRestaurantOwnerException;
+import com.plazoleta.domain.exception.RestaurantServiceUnavailableException;
 import com.plazoleta.domain.exception.UserAlreadyExistsException;
+import com.plazoleta.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,6 +26,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleAlreadyExists(UserAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(NotRestaurantOwnerException.class)
+    public ResponseEntity<Map<String, String>> handleNotOwner(NotRestaurantOwnerException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(RestaurantServiceUnavailableException.class)
+    public ResponseEntity<Map<String, String>> handleUnavailable(RestaurantServiceUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidUserDataException.class)
