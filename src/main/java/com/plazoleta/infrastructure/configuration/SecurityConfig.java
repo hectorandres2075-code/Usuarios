@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/clients").permitAll() // registro público
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/owners").hasRole("ADMINISTRADOR")
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/employees").hasRole("PROPIETARIO")
+                .requestMatchers(HttpMethod.GET, "/api/v1/users/*/phone").hasRole("EMPLEADO")
                 .anyRequest().authenticated())
             .addFilterBefore(new JwtAuthenticationFilter(secret), UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -2,6 +2,7 @@ package com.plazoleta.infrastructure.output.security;
 
 import com.plazoleta.application.port.output.TokenPort;
 import com.plazoleta.domain.model.User;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -22,10 +23,17 @@ public class JwtAdapter implements TokenPort {
     @Override
     public String generate(User user) {
         Date now = new Date();
-        return Jwts.builder()
+        JwtBuilder builder = Jwts.builder()
                 .subject(user.getCorreo())
                 .claim("id", user.getId())
-                .claim("rol", user.getRol().name())
+                .claim("rol", user.getRol().name());
+
+        // Los empleados llevan en el token el restaurante donde trabajan.
+        if (user.getIdRestaurante() != null) {
+            builder.claim("idRestaurante", user.getIdRestaurante());
+        }
+
+        return builder
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + expirationMs))
                 .signWith(key)

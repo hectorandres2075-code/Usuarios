@@ -3,6 +3,7 @@ package com.plazoleta.infrastructure.input.rest;
 import com.plazoleta.application.port.input.CreateClientUseCase;
 import com.plazoleta.application.port.input.CreateEmployeeUseCase;
 import com.plazoleta.application.port.input.CreateOwnerUseCase;
+import com.plazoleta.application.port.input.GetUserPhoneUseCase;
 import com.plazoleta.application.port.input.GetUserRoleUseCase;
 import com.plazoleta.application.port.input.LoginUseCase;
 import com.plazoleta.domain.model.User;
@@ -11,6 +12,7 @@ import com.plazoleta.infrastructure.input.rest.dto.EmployeeRequest;
 import com.plazoleta.infrastructure.input.rest.dto.LoginRequest;
 import com.plazoleta.infrastructure.input.rest.dto.LoginResponse;
 import com.plazoleta.infrastructure.input.rest.dto.OwnerRequest;
+import com.plazoleta.infrastructure.input.rest.dto.PhoneResponse;
 import com.plazoleta.infrastructure.input.rest.dto.RoleResponse;
 import com.plazoleta.infrastructure.input.rest.dto.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,15 +38,25 @@ public class UserController {
     private final CreateEmployeeUseCase createEmployeeUseCase;
     private final CreateClientUseCase createClientUseCase;
     private final LoginUseCase loginUseCase;
+    private final GetUserPhoneUseCase getUserPhoneUseCase;
 
     public UserController(CreateOwnerUseCase createOwnerUseCase, GetUserRoleUseCase getUserRoleUseCase,
                           CreateEmployeeUseCase createEmployeeUseCase, CreateClientUseCase createClientUseCase,
-                          LoginUseCase loginUseCase) {
+                          LoginUseCase loginUseCase, GetUserPhoneUseCase getUserPhoneUseCase) {
         this.createOwnerUseCase = createOwnerUseCase;
         this.getUserRoleUseCase = getUserRoleUseCase;
         this.createEmployeeUseCase = createEmployeeUseCase;
         this.createClientUseCase = createClientUseCase;
         this.loginUseCase = loginUseCase;
+        this.getUserPhoneUseCase = getUserPhoneUseCase;
+    }
+
+    @Operation(summary = "Consultar el celular de un usuario",
+            description = "Solo EMPLEADO. Lo usa Plazoleta para enviarle al cliente el PIN de su pedido por SMS")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/{id}/phone")
+    public PhoneResponse getPhone(@PathVariable Long id) {
+        return new PhoneResponse(getUserPhoneUseCase.getPhone(id));
     }
 
     @Operation(summary = "Iniciar sesión", description = "Público. Devuelve un token JWT si el correo y la clave son correctos")

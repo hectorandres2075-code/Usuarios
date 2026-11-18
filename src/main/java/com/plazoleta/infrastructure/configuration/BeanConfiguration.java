@@ -24,6 +24,8 @@ import com.plazoleta.infrastructure.output.security.JwtAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.plazoleta.application.port.input.GetUserPhoneUseCase;
+import com.plazoleta.application.service.GetUserPhoneService;
 
 /** Aquí se "cablea" la arquitectura: el dominio/aplicación no conocen Spring, solo esta clase. */
 @Configuration
@@ -87,5 +89,10 @@ public class BeanConfiguration {
     public CreateClientUseCase createClientUseCase(UserPersistencePort userPersistencePort,
                                                    PasswordEncoderPort passwordEncoderPort) {
         return new CreateClientService(userPersistencePort, passwordEncoderPort);
+    }
+
+    @Bean
+    public GetUserPhoneUseCase getUserPhoneUseCase(UserPersistencePort userPersistencePort) {
+        return new GetUserPhoneService(userPersistencePort);
     }
 }
