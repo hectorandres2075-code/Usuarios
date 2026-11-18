@@ -11,12 +11,7 @@ import com.plazoleta.domain.exception.UserAlreadyExistsException;
 import com.plazoleta.domain.model.Role;
 import com.plazoleta.domain.model.User;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 public class CreateEmployeeService implements CreateEmployeeUseCase {
-
-    private static final int EDAD_MINIMA = 18;
 
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoderPort;
@@ -35,10 +30,6 @@ public class CreateEmployeeService implements CreateEmployeeUseCase {
 
     @Override
     public User createEmployee(User employee) {
-        if (!esMayorDeEdad(employee.getFechaNacimiento())) {
-            throw new InvalidUserDataException("El empleado debe ser mayor de edad");
-        }
-
         Long ownerId = restaurantServicePort.findOwnerIdByRestaurantId(employee.getIdRestaurante())
                 .orElseThrow(() -> new InvalidUserDataException("El restaurante indicado no existe"));
         // Solo el propietario de ESE restaurante puede crearle empleados.
@@ -56,10 +47,5 @@ public class CreateEmployeeService implements CreateEmployeeUseCase {
         employee.setRol(Role.EMPLEADO);
         employee.setClave(passwordEncoderPort.encode(employee.getClave()));
         return userPersistencePort.save(employee);
-    }
-
-    private boolean esMayorDeEdad(LocalDate fechaNacimiento) {
-        return fechaNacimiento != null
-                && Period.between(fechaNacimiento, LocalDate.now()).getYears() >= EDAD_MINIMA;
     }
 }

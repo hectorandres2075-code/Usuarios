@@ -23,8 +23,7 @@ public class EmployeeRequest {
     @Pattern(regexp = "^\\+?\\d{1,12}$", message = "El celular debe tener máximo 13 caracteres y puede iniciar con +")
     private String celular;
 
-    @NotNull(message = "La fecha de nacimiento es obligatoria")
-    private LocalDate fechaNacimiento;
+    private LocalDate fechaNacimiento; // opcional: el Excel no la pide para empleados
 
     @NotBlank(message = "El correo es obligatorio")
     @Email(message = "El correo no tiene un formato válido")

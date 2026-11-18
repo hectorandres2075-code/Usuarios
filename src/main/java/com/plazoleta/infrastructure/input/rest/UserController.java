@@ -4,9 +4,12 @@ import com.plazoleta.application.port.input.CreateClientUseCase;
 import com.plazoleta.application.port.input.CreateEmployeeUseCase;
 import com.plazoleta.application.port.input.CreateOwnerUseCase;
 import com.plazoleta.application.port.input.GetUserRoleUseCase;
+import com.plazoleta.application.port.input.LoginUseCase;
 import com.plazoleta.domain.model.User;
 import com.plazoleta.infrastructure.input.rest.dto.ClientRequest;
 import com.plazoleta.infrastructure.input.rest.dto.EmployeeRequest;
+import com.plazoleta.infrastructure.input.rest.dto.LoginRequest;
+import com.plazoleta.infrastructure.input.rest.dto.LoginResponse;
 import com.plazoleta.infrastructure.input.rest.dto.OwnerRequest;
 import com.plazoleta.infrastructure.input.rest.dto.RoleResponse;
 import com.plazoleta.infrastructure.input.rest.dto.UserResponse;
@@ -32,13 +35,22 @@ public class UserController {
     private final GetUserRoleUseCase getUserRoleUseCase;
     private final CreateEmployeeUseCase createEmployeeUseCase;
     private final CreateClientUseCase createClientUseCase;
+    private final LoginUseCase loginUseCase;
 
     public UserController(CreateOwnerUseCase createOwnerUseCase, GetUserRoleUseCase getUserRoleUseCase,
-                          CreateEmployeeUseCase createEmployeeUseCase, CreateClientUseCase createClientUseCase) {
+                          CreateEmployeeUseCase createEmployeeUseCase, CreateClientUseCase createClientUseCase,
+                          LoginUseCase loginUseCase) {
         this.createOwnerUseCase = createOwnerUseCase;
         this.getUserRoleUseCase = getUserRoleUseCase;
         this.createEmployeeUseCase = createEmployeeUseCase;
         this.createClientUseCase = createClientUseCase;
+        this.loginUseCase = loginUseCase;
+    }
+
+    @Operation(summary = "Iniciar sesión", description = "Público. Devuelve un token JWT si el correo y la clave son correctos")
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return new LoginResponse(loginUseCase.login(request.getCorreo(), request.getClave()));
     }
 
     @Operation(summary = "Registrar cliente", description = "Público: cualquier persona puede registrarse como CLIENTE")

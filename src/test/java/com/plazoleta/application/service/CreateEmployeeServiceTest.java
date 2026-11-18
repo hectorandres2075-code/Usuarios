@@ -60,11 +60,14 @@ class CreateEmployeeServiceTest {
     }
 
     @Test
-    void createEmployee_menorDeEdad_lanzaExcepcion() {
-        employee.setFechaNacimiento(LocalDate.now().minusYears(16));
+    void createEmployee_sinFechaDeNacimiento_creaElEmpleado() {
+        employee.setFechaNacimiento(null); // el Excel no la exige para empleados
+        when(restaurantServicePort.findOwnerIdByRestaurantId(1L)).thenReturn(Optional.of(7L));
+        when(authenticatedUserPort.currentUserId()).thenReturn(7L);
+        when(passwordEncoderPort.encode("clave123")).thenReturn("hash");
+        when(userPersistencePort.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
 
-        assertThrows(InvalidUserDataException.class, () -> service.createEmployee(employee));
-        verify(userPersistencePort, never()).save(any());
+        assertEquals(Role.EMPLEADO, service.createEmployee(employee).getRol());
     }
 
     @Test

@@ -26,7 +26,7 @@ public class SecurityConfig {
             .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
-                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll() // login público
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/clients").permitAll() // registro público
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/owners").hasRole("ADMINISTRADOR")
                 .requestMatchers(HttpMethod.POST, "/api/v1/users/employees").hasRole("PROPIETARIO")
